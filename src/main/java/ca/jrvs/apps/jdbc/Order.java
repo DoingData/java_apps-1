@@ -1,6 +1,6 @@
 package ca.jrvs.apps.jdbc;
 
-import ca.jrvs.apps.jdbc.ca.jrvs.apps.jdbc.util.DataTransferObject;
+import ca.jrvs.apps.jdbc.util.DataTransferObject;
 
 import java.util.LinkedList;
 
