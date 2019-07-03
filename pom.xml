@@ -22,5 +22,15 @@
       <artifactId>postgresql</artifactId>
       <version>42.2.5</version>
     </dependency>
+      <dependency>
+          <groupId>oauth.signpost</groupId>
+          <artifactId>signpost-core</artifactId>
+          <version>1.2.1.2</version>
+      </dependency>
+      <dependency>
+          <groupId>oauth.signpost</groupId>
+          <artifactId>signpost-commonshttp4</artifactId>
+          <version>1.2.1.2</version>
+      </dependency>
   </dependencies>
 </project>
