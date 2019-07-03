@@ -11,7 +11,7 @@ public class JDBCExecutor {
         try{
             Connection connection = dcm.getConnection();
             CustomerDAO customerDAO = new CustomerDAO(connection);
-            /*Customer customer = new Customer();
+            Customer customer = new Customer();
             customer.setFirstName("George");
             customer.setLastName("Washington");
             customer.setEmail("george.washington@wh.gov");
@@ -20,18 +20,14 @@ public class JDBCExecutor {
             customer.setCity("Mount Vernon");
             customer.setState("VA");
             customer.setZipCode("22121");
-            customerDAO.create(customer);*/
-            /*Customer customer = customerDAO.findById(1000);
-            System.out.println(customer.getFirstName() + " " + customer.getLastName()); */
-            /*Customer customer = customerDAO.find
-            ById(10000);
-            System.out.println(customer.getFirstName() + " " + customer.getLastName() + " "
-                    + customer.getEmail());
+            customerDAO.create(customer);
+            customer = customerDAO.findById(1000);
+            System.out.println(customer.getFirstName() + " " + customer.getLastName());
             customer.setEmail("gwashington@wh.gov");
             customer = customerDAO.update(customer);
             System.out.println(customer.getFirstName() + " " + customer.getLastName() + " "
-                    + customer.getEmail());*/
-            /*Customer customer = new Customer();
+                    + customer.getEmail());
+            customer = new Customer();
             customer.setFirstName("John");
             customer.setLastName("Adams");
             customer.setEmail("jadams@wh.gov");
@@ -47,7 +43,7 @@ public class JDBCExecutor {
             dbcustomer.setEmail("john.adams@wh.gov");
             dbcustomer = customerDAO.update(dbcustomer);
             System.out.println(dbcustomer);
-            customerDAO.delete(dbcustomer.getId());*/
+            customerDAO.delete(dbcustomer.getId());
             OrderDAO orderDao = new OrderDAO(connection);
             Order test = orderDao.findById(1000);
             System.out.println(test);
