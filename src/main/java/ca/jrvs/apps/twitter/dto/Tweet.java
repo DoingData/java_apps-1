@@ -1,7 +1,10 @@
 package ca.jrvs.apps.twitter.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.math.BigInteger;
 
+@JsonIgnoreProperties
 public class Tweet {
     private String created_at;
     private BigInteger id;
