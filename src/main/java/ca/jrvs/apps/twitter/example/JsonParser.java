@@ -62,8 +62,6 @@ public class JsonParser {
             System.out.println(json);
             Company company2 = toObjectFromJson(json, Company.class);
             System.out.println(company2.equals(company));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
