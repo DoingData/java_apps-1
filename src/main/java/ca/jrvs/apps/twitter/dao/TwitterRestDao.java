@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 public class TwitterRestDao implements CrdRepository<Tweet, String> {
 
     private HttpHelper httpHelper;
+    private final String STATUSLINE_OK = "HTTP/1.1 200 OK";
 
     public TwitterRestDao(HttpHelper httpHelper) {
         this.httpHelper = httpHelper;
@@ -30,8 +31,13 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
     public Tweet findById(String s) {
         validateId(s);
         HttpResponse httpResponse = httpHelper.httpGet(createFindURI(s));
-        String responseInJson = getResponseInJson(httpResponse);
-        return jsonToTweet(responseInJson);
+        String statusLine = httpResponse.getStatusLine().toString();
+        if (statusLine.equals(STATUSLINE_OK)) {
+            String responseInJson = getResponseInJson(httpResponse);
+            return jsonToTweet(responseInJson);
+        } else {
+            throw new RuntimeException("Could not find tweet. " + statusLine);
+        }
     }
 
     private void validateId(String s) {
