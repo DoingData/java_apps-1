@@ -15,10 +15,14 @@ import java.net.URI;
 
 public class ApacheHttpHelper implements HttpHelper {
 
-    private static String CONSUMER_KEY = System.getenv("CONSUMER_KEY");
-    private static String CONSUMER_SECRET = System.getenv("CONSUMER_SECRET");
-    private static String ACCESS_TOKEN = System.getenv("ACCESS_TOKEN");
-    private static String TOKEN_SECRET = System.getenv("TOKEN_SECRET");
+    private OAuthConsumer consumer;
+    private HttpClient httpClient;
+
+    public ApacheHttpHelper() {
+        consumer = new CommonsHttpOAuthConsumer(System.getenv("CONSUMER_KEY"), System.getenv("CONSUMER_SECRET"));
+        consumer.setTokenWithSecret(System.getenv("ACCESS_TOKEN"), System.getenv("TOKEN_SECRET"));
+        httpClient = new DefaultHttpClient();
+    }
 
     @Override
     public HttpResponse httpPost(URI uri) {
@@ -26,9 +30,6 @@ public class ApacheHttpHelper implements HttpHelper {
     }
 
     private HttpResponse httpRequest(HttpUriRequest request) {
-        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-        consumer.setTokenWithSecret(ACCESS_TOKEN, TOKEN_SECRET);
-        HttpClient httpClient = new DefaultHttpClient();
         try {
             consumer.sign(request);
             return httpClient.execute(request);

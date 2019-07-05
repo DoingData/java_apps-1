@@ -1,6 +1,7 @@
 package ca.jrvs.apps.twitter.dao;
 
 import ca.jrvs.apps.twitter.dao.helper.ApacheHttpHelper;
+import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dto.Tweet;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,8 +13,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class TwitterRestDao implements CrdRepository<Tweet, String> {
+
+    private HttpHelper httpHelper;
+
+    public TwitterRestDao(HttpHelper httpHelper) {
+        this.httpHelper = httpHelper;
+    }
+
     public static void main(String[] args) {
-        TwitterRestDao t = new TwitterRestDao();
+        TwitterRestDao t = new TwitterRestDao(new ApacheHttpHelper());
         Tweet tweet = t.findById("1146478188878532608");
         System.out.println(tweet.getText());
     }
@@ -21,8 +29,7 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
     @Override
     public Tweet findById(String s) {
         validateId(s);
-        ApacheHttpHelper apacheHttpHelper = new ApacheHttpHelper();
-        HttpResponse httpResponse = apacheHttpHelper.httpGet(createFindURI(s));
+        HttpResponse httpResponse = httpHelper.httpGet(createFindURI(s));
         String responseInJson = getResponseInJson(httpResponse);
         return jsonToTweet(responseInJson);
     }
@@ -65,7 +72,7 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
     }
 
     @Override
-    public Tweet save(Tweet entity) {
+    public Tweet create(Tweet entity) {
         return null;
     }
 
