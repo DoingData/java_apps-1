@@ -1,17 +1,19 @@
 package ca.jrvs.apps.twitter.dto;
 
+import java.math.BigInteger;
+
 public class UserMention {
-    private int id;
+    private BigInteger id;
     private String id_str;
     private int[] indices;
     private String name;
     private String screen_name;
 
-    public int getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
