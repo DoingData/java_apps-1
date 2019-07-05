@@ -1,14 +1,14 @@
 package ca.jrvs.apps.twitter.dto;
 
 public class Coordinates {
-    private float[] coordinates;
+    private double[] coordinates;
     private String type;
 
-    public float[] getCoordinates() {
+    public double[] getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(float[] coordinates) {
+    public void setCoordinates(double[] coordinates) {
         this.coordinates = coordinates;
     }
 
