@@ -20,6 +20,7 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
     private static final String BASE_URI = "https://api.twitter.com/1.1/statuses/";
     private static final String FIND_URI = "show.json";
     private static final String POST_URI = "update.json";
+    private static final String DELETE_URI = "destroy/";
     //URI symbols
     private static final String QUERY_SYMBOL = "?";
     private static final String AND = "&";
@@ -35,21 +36,32 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
 
     public static void main(String[] args) {
         TwitterRestDao t = new TwitterRestDao(new ApacheHttpHelper());
-        Tweet tweet = t.findById("1146478188878532608");
+        Tweet tweet = t.findById("1147219416570040321");
         System.out.println(tweet.getText());
+//        Tweet post = new Tweet();
+//        post.setText("more testing #testing @Pranavi30317716");
+//        Coordinates coordinates = new Coordinates();
+//        coordinates.setCoordinates(new double[]{79.38, -44.1});
+//        post.setCoordinates(coordinates);
+//        Tweet tweet2 = t.save(post);
+//        System.out.println(tweet2.getText());
+//        //Tweet tweet3 = t.deleteById("1147228202462535681");
+        StringBuilder s = new StringBuilder("abc");
+        for (int i = 1; i <= 140; i++) {
+            s.append(" t");
+        }
+        s.append("abc");
         Tweet post = new Tweet();
-        //post.setText("Automatically created tweet with coordinates");
-        post.setText("Another tweet #testing #coordinates )§&");
+        post.setText(s.toString());
         Coordinates coordinates = new Coordinates();
         coordinates.setCoordinates(new double[]{79.38, -44.1});
         post.setCoordinates(coordinates);
-        Tweet tweet2 = t.save(post);
-        System.out.println(tweet2.getText());
+        t.save(post);
+
     }
 
     @Override
     public Tweet findById(String s) {
-        validateId(s);
         HttpResponse httpResponse = httpHelper.httpGet(generateFindUri(s));
         return extractTweetFromResponse(httpResponse);
     }
@@ -66,22 +78,34 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
         return extractTweetFromResponse(httpResponse);
     }
 
-    private void validateId(String s) {
-        for (char c : s.toCharArray()) {
-            if (c > '9' || c < '0') {
-                throw new IllegalArgumentException("Input is not a valid id.");
-            }
-        }
-    }
-
     private URI generateFindUri(String s) {
         try {
             StringBuilder uri = new StringBuilder(BASE_URI).append(FIND_URI);
             appendQuery(uri, "id", s, true);
             return new URI(uri.toString());
         } catch (URISyntaxException e) {
-            throw new RuntimeException("Unable to construct URI", e);
+            throw new RuntimeException("Unable to construct URI.", e);
         }
+    }
+
+    private void appendQuery(StringBuilder s, String key, String value, boolean firstParameter) {
+        if (firstParameter) {
+            s.append(QUERY_SYMBOL);
+        } else {
+            s.append(AND);
+        }
+        s.append(key).append(EQUAL).append(value);
+    }
+
+    private URI generatePostUri(Tweet tweet) throws URISyntaxException, UnsupportedEncodingException {
+        StringBuilder uri = new StringBuilder(BASE_URI).append(POST_URI);
+        Double latitude = tweet.getCoordinates().getCoordinates()[0];
+        Double longitude = tweet.getCoordinates().getCoordinates()[1];
+        String text = URLEncoder.encode(tweet.getText(), StandardCharsets.UTF_8.name());
+        appendQuery(uri, "status", text, true);
+        appendQuery(uri, "lat", latitude.toString(), false);
+        appendQuery(uri, "long", longitude.toString(), false);
+        return new URI(uri.toString());
     }
 
     private Tweet extractTweetFromResponse(HttpResponse response) {
@@ -107,28 +131,18 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
         return tweet;
     }
 
-    private URI generatePostUri(Tweet tweet) throws URISyntaxException, UnsupportedEncodingException {
-        StringBuilder uri = new StringBuilder(BASE_URI).append(POST_URI);
-        Double latitude = tweet.getCoordinates().getCoordinates()[0];
-        Double longitude = tweet.getCoordinates().getCoordinates()[1];
-        String text = URLEncoder.encode(tweet.getText(), StandardCharsets.UTF_8.name());
-        appendQuery(uri, "status", text, true);
-        appendQuery(uri, "lat", latitude.toString(), false);
-        appendQuery(uri, "long", longitude.toString(), false);
-        return new URI(uri.toString());
-    }
-
-    private void appendQuery(StringBuilder s, String key, String value, boolean firstParameter) {
-        if (firstParameter) {
-            s.append(QUERY_SYMBOL);
-        } else {
-            s.append(AND);
-        }
-        s.append(key).append(EQUAL).append(value);
-    }
-
     @Override
     public Tweet deleteById(String s) {
-        return null;
+        HttpResponse response = httpHelper.httpPost(generateDeleteUri(s));
+        return extractTweetFromResponse(response);
+    }
+
+    private URI generateDeleteUri(String s) {
+        try {
+            StringBuilder uri = new StringBuilder(BASE_URI).append(DELETE_URI).append(s).append(".json");
+            return new URI(uri.toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Unable to construct URI.", e);
+        }
     }
 }
