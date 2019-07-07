@@ -1,8 +1,12 @@
 package ca.jrvs.apps.twitter.service;
 
 import ca.jrvs.apps.twitter.dao.CrdRepository;
+import ca.jrvs.apps.twitter.dao.TwitterRestDao;
+import ca.jrvs.apps.twitter.dao.helper.ApacheHttpHelper;
 import ca.jrvs.apps.twitter.dto.Coordinates;
 import ca.jrvs.apps.twitter.dto.Tweet;
+
+import java.util.Arrays;
 
 public class TwitterServiceImp implements TwitterService {
 
@@ -12,9 +16,75 @@ public class TwitterServiceImp implements TwitterService {
         this.crdRepository = crdRepository;
     }
 
+    public static void main(String[] args) {
+        TwitterServiceImp imp = new TwitterServiceImp(new TwitterRestDao(new ApacheHttpHelper()));
+        imp.showTweet("1147229192389574656", new String[]{"TeXt", "created AT", "another", "hashtags", "location", "user Mention"});
+    }
+
+    @Override
+    public void showTweet(String id, String[] fields) {
+        validateId(id);
+        Tweet tweet = crdRepository.findById(id);
+        for (String s : fields) {
+            switch (s.toLowerCase()) {
+                case "created at":
+                case "date":
+                    System.out.println("Created at: " + tweet.getCreated_at());
+                    break;
+                case "id":
+                    System.out.println("Id: " + tweet.getId_str());
+                    break;
+                case "text":
+                    System.out.println("Text: " + tweet.getText());
+                    break;
+                case "retweet count":
+                    System.out.println("Retweet count: " + tweet.getRetweet_count());
+                    break;
+                case "favorite count":
+                    System.out.println("Favorite count: " + tweet.getFavorite_count());
+                    break;
+                case "favorited":
+                case "liked":
+                    System.out.println("Favorited: " + tweet.isFavorited());
+                    break;
+                case "retweeted":
+                    System.out.println("Retweeted: " + tweet.isRetweeted());
+                    break;
+                case "coordinates":
+                case "location":
+                    StringBuilder coordinates = new StringBuilder("Coordinates: ");
+                    coordinates.append(tweet.getCoordinates().getCoordinates()[0]).append(", ").append(tweet.getCoordinates().getCoordinates()[1]);
+                    System.out.println(coordinates.toString());
+                    break;
+                case "hashtags":
+                    System.out.print("Hashtags: ");
+                    Arrays.stream(tweet.getEntities().getHashtags()).map(h -> h.getText()).forEach(x -> System.out.print("#" + x + " "));
+                    System.out.print("\n");
+                    break;
+                case "user mention":
+                    System.out.print("User mentions: ");
+                    Arrays.stream(tweet.getEntities().getUser_mentions()).map(m -> m.getScreen_name()).forEach(x -> System.out.print("@" + x + " "));
+                    System.out.print("\n");
+                    break;
+                default:
+                    System.out.println("This attribute does not exist: " + s);
+            }
+        }
+    }
+
+    private void validateId(String id) {
+        char[] str = id.toCharArray();
+        for (int i = 0; i < str.length; i++) {
+            char c = str[i];
+            if (c < '0' || c > '9') {
+                throw new IllegalArgumentException("Twitter ids only contain digits.");
+            }
+        }
+    }
+
     @Override
     public void postTweet(String text, Double latitude, Double longitude) {
-        validateTextLength(text);
+        validateTweetLength(text);
         Tweet tweet = new Tweet();
         tweet.setText(text);
         Coordinates coordinates = new Coordinates();
@@ -23,7 +93,7 @@ public class TwitterServiceImp implements TwitterService {
         crdRepository.save(tweet);
     }
 
-    private void validateTextLength(String text) {
+    private void validateTweetLength(String text) {
         String textWithoutSpaces = text.replaceAll("\\s", "");
         if (textWithoutSpaces.length() > 140) {
             throw new IllegalArgumentException("A tweet can only contain 140 characters.");
@@ -31,31 +101,10 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     @Override
-    public void showTweet(String id, String[] fields) {
-        boolean validated = validateId(id);
-        if (validated) {
-
-        }
-    }
-
-    private boolean validateId(String id) {
-        char[] str = id.toCharArray();
-        for (int i = 0; i < str.length; i++) {
-            char c = str[i];
-            if (c < '0' || c > '9') {
-                throw new IllegalArgumentException("Twitter ids only contain digits.");
-            }
-        }
-        return true;
-    }
-
-    @Override
     public void deleteTweets(String[] ids) {
         for (int i = 0; i < ids.length; i++) {
-            boolean validated = validateId(ids[i]);
-            if (validated) {
-                crdRepository.deleteById(ids[i]);
-            }
+            validateId(ids[i]);
+            crdRepository.deleteById(ids[i]);
         }
     }
 }
