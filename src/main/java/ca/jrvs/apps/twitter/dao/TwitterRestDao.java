@@ -32,54 +32,40 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
         this.httpHelper = httpHelper;
     }
 
+    /**
+     * Finds a tweet by id
+     *
+     * @param id id of tweet
+     * @return corresponding tweet
+     */
     @Override
-    public Tweet findById(String s) {
-        HttpResponse httpResponse = httpHelper.httpGet(generateFindUri(s));
+    public Tweet findById(String id) {
+        HttpResponse httpResponse = httpHelper.httpGet(generateFindUri(id));
         return extractTweetFromResponse(httpResponse);
     }
 
-    @Override
-    public Tweet save(Tweet entity) {
-        URI uri = null;
-        try {
-            uri = generatePostUri(entity);
-        } catch (URISyntaxException | UnsupportedEncodingException e) {
-            throw new RuntimeException("Invalid tweet.", e);
-        }
-        HttpResponse httpResponse = httpHelper.httpPost(uri);
-        return extractTweetFromResponse(httpResponse);
-    }
-
-    private URI generateFindUri(String s) {
+    /**
+     * Creates the URI to find a tweet
+     *
+     * @param id id of tweet
+     * @return uri
+     */
+    private URI generateFindUri(String id) {
         try {
             StringBuilder uri = new StringBuilder(BASE_URI).append(FIND_URI);
-            appendQuery(uri, "id", s, true);
+            appendQuery(uri, "id", id, true);
             return new URI(uri.toString());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Unable to construct URI.", e);
         }
     }
 
-    private void appendQuery(StringBuilder s, String key, String value, boolean firstParameter) {
-        if (firstParameter) {
-            s.append(QUERY_SYMBOL);
-        } else {
-            s.append(AND);
-        }
-        s.append(key).append(EQUAL).append(value);
-    }
-
-    private URI generatePostUri(Tweet tweet) throws URISyntaxException, UnsupportedEncodingException {
-        StringBuilder uri = new StringBuilder(BASE_URI).append(POST_URI);
-        Double latitude = tweet.getCoordinates().getCoordinates()[0];
-        Double longitude = tweet.getCoordinates().getCoordinates()[1];
-        String text = URLEncoder.encode(tweet.getText(), StandardCharsets.UTF_8.name());
-        appendQuery(uri, "status", text, true);
-        appendQuery(uri, "lat", latitude.toString(), false);
-        appendQuery(uri, "long", longitude.toString(), false);
-        return new URI(uri.toString());
-    }
-
+    /**
+     * Converts http response to a tweet
+     *
+     * @param response http response
+     * @return tweet
+     */
     private Tweet extractTweetFromResponse(HttpResponse response) {
         Tweet tweet = null;
         int statusCode = response.getStatusLine().getStatusCode();
@@ -103,15 +89,78 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
         return tweet;
     }
 
+    /**
+     * Appends a parameter pair to a uri
+     * @param s uri where parameter pair is to be added
+     * @param key key of the parameter pair
+     * @param value values of parameter pair
+     * @param firstParameter true if it is the first parameter pair in the uri
+     */
+    private void appendQuery(StringBuilder s, String key, String value, boolean firstParameter) {
+        if (firstParameter) {
+            s.append(QUERY_SYMBOL);
+        } else {
+            s.append(AND);
+        }
+        s.append(key).append(EQUAL).append(value);
+    }
+
+    /**
+     * Posts a tweet on twitter
+     *
+     * @param tweet tweet to be posted
+     * @return posted tweet
+     */
     @Override
-    public Tweet deleteById(String s) {
-        HttpResponse response = httpHelper.httpPost(generateDeleteUri(s));
+    public Tweet save(Tweet tweet) {
+        URI uri = null;
+        try {
+            uri = generatePostUri(tweet);
+        } catch (URISyntaxException | UnsupportedEncodingException e) {
+            throw new RuntimeException("Invalid tweet.", e);
+        }
+        HttpResponse httpResponse = httpHelper.httpPost(uri);
+        return extractTweetFromResponse(httpResponse);
+    }
+
+    /**
+     * Creates URI to post a tweet
+     * @param tweet tweet to be posted
+     * @return uri
+     * @throws URISyntaxException
+     * @throws UnsupportedEncodingException
+     */
+    private URI generatePostUri(Tweet tweet) throws URISyntaxException, UnsupportedEncodingException {
+        StringBuilder uri = new StringBuilder(BASE_URI).append(POST_URI);
+        Double latitude = tweet.getCoordinates().getCoordinates()[0];
+        Double longitude = tweet.getCoordinates().getCoordinates()[1];
+        String text = URLEncoder.encode(tweet.getText(), StandardCharsets.UTF_8.name());
+        appendQuery(uri, "status", text, true);
+        appendQuery(uri, "lat", latitude.toString(), false);
+        appendQuery(uri, "long", longitude.toString(), false);
+        return new URI(uri.toString());
+    }
+
+    /**
+     * Deletes a tweet on twitter
+     * @param id id of tweet
+     * @return deleted tweet
+     */
+    @Override
+    public Tweet deleteById(String id) {
+        HttpResponse response = httpHelper.httpPost(generateDeleteUri(id));
         return extractTweetFromResponse(response);
     }
 
-    private URI generateDeleteUri(String s) {
+    /**
+     * Creates URI to delete a tweet
+     *
+     * @param id id of tweet
+     * @return uri
+     */
+    private URI generateDeleteUri(String id) {
         try {
-            StringBuilder uri = new StringBuilder(BASE_URI).append(DELETE_URI).append(s).append(".json");
+            StringBuilder uri = new StringBuilder(BASE_URI).append(DELETE_URI).append(id).append(".json");
             return new URI(uri.toString());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Unable to construct URI.", e);

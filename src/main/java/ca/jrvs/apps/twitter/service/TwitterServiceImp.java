@@ -21,6 +21,12 @@ public class TwitterServiceImp implements TwitterService {
         imp.showTweet("1147229192389574656", new String[]{"TeXt", "created AT", "another", "hashtags", "location", "user Mention"});
     }
 
+    /**
+     * Prints a tweet
+     *
+     * @param id     id of the tweet
+     * @param fields names of the fields to be shown
+     */
     @Override
     public void showTweet(String id, String[] fields) {
         validateId(id);
@@ -72,6 +78,10 @@ public class TwitterServiceImp implements TwitterService {
         }
     }
 
+    /**
+     * Checks that an id only contains digits
+     * @param id the string to be checked
+     */
     private void validateId(String id) {
         char[] str = id.toCharArray();
         for (int i = 0; i < str.length; i++) {
@@ -82,6 +92,12 @@ public class TwitterServiceImp implements TwitterService {
         }
     }
 
+    /**
+     * Posts a new tweet with a location on twitter
+     * @param text the text of the tweet
+     * @param latitude latitude of the location
+     * @param longitude longitude of the location
+     */
     @Override
     public void postTweet(String text, Double latitude, Double longitude) {
         validateTweetLength(text);
@@ -93,6 +109,10 @@ public class TwitterServiceImp implements TwitterService {
         crdRepository.save(tweet);
     }
 
+    /**
+     * Checks that a tweet is not too long
+     * @param text text of the tweet
+     */
     private void validateTweetLength(String text) {
         String textWithoutSpaces = text.replaceAll("\\s", "");
         if (textWithoutSpaces.length() > 140) {
@@ -100,6 +120,10 @@ public class TwitterServiceImp implements TwitterService {
         }
     }
 
+    /**
+     * Deletes a tweet on twitter
+     * @param ids id of the tweet
+     */
     @Override
     public void deleteTweets(String[] ids) {
         for (int i = 0; i < ids.length; i++) {
