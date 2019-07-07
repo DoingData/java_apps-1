@@ -24,11 +24,22 @@ public class ApacheHttpHelper implements HttpHelper {
         httpClient = new DefaultHttpClient();
     }
 
+    /**
+     * Gets a http response for a http post request
+     *
+     * @param uri uri for the post request
+     * @return http response
+     */
     @Override
     public HttpResponse httpPost(URI uri) {
         return httpRequest(new HttpPost(uri));
     }
 
+    /**
+     * Gets a http response for a http request
+     * @param request http request
+     * @return http response
+     */
     private HttpResponse httpRequest(HttpUriRequest request) {
         try {
             consumer.sign(request);
@@ -39,6 +50,11 @@ public class ApacheHttpHelper implements HttpHelper {
         }
     }
 
+    /**
+     * Gets http response for a http get request
+     * @param uri uri for the get request
+     * @return http response
+     */
     @Override
     public HttpResponse httpGet(URI uri) {
         return httpRequest(new HttpGet(uri));
