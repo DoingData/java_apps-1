@@ -1,8 +1,6 @@
 package ca.jrvs.apps.twitter.dao;
 
-import ca.jrvs.apps.twitter.dao.helper.ApacheHttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
-import ca.jrvs.apps.twitter.dto.Coordinates;
 import ca.jrvs.apps.twitter.dto.Tweet;
 import ca.jrvs.apps.twitter.util.JsonUtil;
 import org.apache.http.HttpResponse;
@@ -32,32 +30,6 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
 
     public TwitterRestDao(HttpHelper httpHelper) {
         this.httpHelper = httpHelper;
-    }
-
-    public static void main(String[] args) {
-        TwitterRestDao t = new TwitterRestDao(new ApacheHttpHelper());
-        Tweet tweet = t.findById("1147219416570040321");
-        System.out.println(tweet.getText());
-//        Tweet post = new Tweet();
-//        post.setText("more testing #testing @Pranavi30317716");
-//        Coordinates coordinates = new Coordinates();
-//        coordinates.setCoordinates(new double[]{79.38, -44.1});
-//        post.setCoordinates(coordinates);
-//        Tweet tweet2 = t.save(post);
-//        System.out.println(tweet2.getText());
-//        //Tweet tweet3 = t.deleteById("1147228202462535681");
-        StringBuilder s = new StringBuilder("abc");
-        for (int i = 1; i <= 140; i++) {
-            s.append(" t");
-        }
-        s.append("abc");
-        Tweet post = new Tweet();
-        post.setText(s.toString());
-        Coordinates coordinates = new Coordinates();
-        coordinates.setCoordinates(new double[]{79.38, -44.1});
-        post.setCoordinates(coordinates);
-        t.save(post);
-
     }
 
     @Override
