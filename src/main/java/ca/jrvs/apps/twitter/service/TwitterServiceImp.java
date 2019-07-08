@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 public class TwitterServiceImp implements TwitterService {
 
+    private static final int MAX_TWEET_LENGTH = 140;
+
     private CrdRepository<Tweet, String> crdRepository;
 
     public TwitterServiceImp(CrdRepository<Tweet, String> crdRepository) {
@@ -103,7 +105,7 @@ public class TwitterServiceImp implements TwitterService {
      */
     @Override
     public void postTweet(String text, Double latitude, Double longitude) {
-        validateTweetLength(text);
+        validateTweetText(text);
         validateLatitude(latitude);
         validateLongitude(longitude);
         Tweet tweet = new Tweet();
@@ -119,9 +121,12 @@ public class TwitterServiceImp implements TwitterService {
      *
      * @param text text of the tweet
      */
-    private void validateTweetLength(String text) {
+    private void validateTweetText(String text) {
+        if (text == "") {
+            throw new IllegalArgumentException("A tweet must contain at least one character.");
+        }
         String textWithoutSpaces = text.replaceAll("\\s", "");
-        if (textWithoutSpaces.length() > 140) {
+        if (textWithoutSpaces.length() > MAX_TWEET_LENGTH) {
             throw new IllegalArgumentException("A tweet can only contain 140 characters.");
         }
     }
