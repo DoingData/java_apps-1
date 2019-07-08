@@ -4,7 +4,6 @@ import ca.jrvs.apps.twitter.dao.helper.ApacheHttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dto.Coordinates;
 import ca.jrvs.apps.twitter.dto.Tweet;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,12 +14,11 @@ public class TwitterRestDaoTest {
 
     private Tweet expectedTweet;
     private CrdRepository dao;
-    private String id;
 
     @Before
     public void setup() {
         expectedTweet = new Tweet();
-        String tweetText = "this is a test expectedTweet " + System.currentTimeMillis();
+        String tweetText = "this is a test #testing " + System.currentTimeMillis();
         expectedTweet.setText(tweetText);
         Coordinates coordinates = new Coordinates();
         coordinates.setCoordinates(new double[]{15.3, 23.2});
@@ -31,19 +29,19 @@ public class TwitterRestDaoTest {
         dao = new TwitterRestDao(httpHelper);
     }
 
-    @After
-    public void cleanup() {
-        dao.deleteById(id);
-    }
-
     @Test
-    public void create() {
+    public void test() {
+        //test create()
         Tweet actualTweet = (Tweet) dao.create(expectedTweet);
-        id = actualTweet.getId_str();
         assertTweets(expectedTweet, actualTweet);
 
-        Tweet showTweet = (Tweet) dao.findById(id);
+        //test findById()
+        Tweet showTweet = (Tweet) dao.findById(actualTweet.getId_str());
         assertTweets(expectedTweet, showTweet);
+
+        //test deleteById()
+        Tweet deletedTweet = (Tweet) dao.deleteById(actualTweet.getId_str());
+        assertTweets(expectedTweet, deletedTweet);
     }
 
     public void assertTweets(Tweet expected, Tweet actual) {
