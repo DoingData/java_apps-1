@@ -20,6 +20,7 @@ public class TwitterServiceImp implements TwitterService {
         TwitterServiceImp imp = new TwitterServiceImp(new TwitterRestDao(new ApacheHttpHelper()));
         //imp.showTweet("1147229192389574656", new String[]{"TeXt", "created AT", "another", "hashtags", "location", "user Mentions"});
         imp.showTweet("1147229192389574656", new String[]{});
+        imp.postTweet("hello", 81.0, 223.23);
     }
 
     /**
@@ -107,12 +108,36 @@ public class TwitterServiceImp implements TwitterService {
     @Override
     public void postTweet(String text, Double latitude, Double longitude) {
         validateTweetLength(text);
+        validateLatitude(latitude);
+        validateLongitude(longitude);
         Tweet tweet = new Tweet();
         tweet.setText(text);
         Coordinates coordinates = new Coordinates();
         coordinates.setCoordinates(new double[]{latitude, longitude});
         tweet.setCoordinates(coordinates);
         crdRepository.save(tweet);
+    }
+
+    /**
+     * Checks whether the input is a valid latitude
+     *
+     * @param latitude latitude to check
+     */
+    private void validateLatitude(double latitude) {
+        if (latitude < -90 || latitude > 90) {
+            throw new IllegalArgumentException("The latitude must be between -90 and 90.");
+        }
+    }
+
+    /**
+     * Checks whetherthe input is valid longitude
+     *
+     * @param longitude longitude to check
+     */
+    private void validateLongitude(double longitude) {
+        if (longitude < -180 || longitude > 180) {
+            throw new IllegalArgumentException("The longitude must be between -180 and 180.");
+        }
     }
 
     /**
