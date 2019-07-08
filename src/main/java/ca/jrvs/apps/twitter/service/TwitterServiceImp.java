@@ -18,7 +18,8 @@ public class TwitterServiceImp implements TwitterService {
 
     public static void main(String[] args) {
         TwitterServiceImp imp = new TwitterServiceImp(new TwitterRestDao(new ApacheHttpHelper()));
-        imp.showTweet("1147229192389574656", new String[]{"TeXt", "created AT", "another", "hashtags", "location", "user Mention"});
+        //imp.showTweet("1147229192389574656", new String[]{"TeXt", "created AT", "another", "hashtags", "location", "user Mentions"});
+        imp.showTweet("1147229192389574656", new String[]{});
     }
 
     /**
@@ -31,6 +32,9 @@ public class TwitterServiceImp implements TwitterService {
     public void showTweet(String id, String[] fields) {
         validateId(id);
         Tweet tweet = crdRepository.findById(id);
+        if (fields == null || fields.length == 0) {
+            fields = new String[]{"created at", "id", "text", "retweet count", "favorite count", "favorited", "retweeted", "coordinates", "user mentions"};
+        }
         for (String s : fields) {
             switch (s.toLowerCase()) {
                 case "created at":
@@ -67,7 +71,7 @@ public class TwitterServiceImp implements TwitterService {
                     Arrays.stream(tweet.getEntities().getHashtags()).map(h -> h.getText()).forEach(x -> System.out.print("#" + x + " "));
                     System.out.print("\n");
                     break;
-                case "user mention":
+                case "user mentions":
                     System.out.print("User mentions: ");
                     Arrays.stream(tweet.getEntities().getUser_mentions()).map(m -> m.getScreen_name()).forEach(x -> System.out.print("@" + x + " "));
                     System.out.print("\n");
@@ -80,6 +84,7 @@ public class TwitterServiceImp implements TwitterService {
 
     /**
      * Checks that an id only contains digits
+     *
      * @param id the string to be checked
      */
     private void validateId(String id) {
@@ -94,8 +99,9 @@ public class TwitterServiceImp implements TwitterService {
 
     /**
      * Posts a new tweet with a location on twitter
-     * @param text the text of the tweet
-     * @param latitude latitude of the location
+     *
+     * @param text      the text of the tweet
+     * @param latitude  latitude of the location
      * @param longitude longitude of the location
      */
     @Override
@@ -111,6 +117,7 @@ public class TwitterServiceImp implements TwitterService {
 
     /**
      * Checks that a tweet is not too long
+     *
      * @param text text of the tweet
      */
     private void validateTweetLength(String text) {
@@ -122,6 +129,7 @@ public class TwitterServiceImp implements TwitterService {
 
     /**
      * Deletes a tweet on twitter
+     *
      * @param ids id of the tweet
      */
     @Override
