@@ -1,8 +1,6 @@
 package ca.jrvs.apps.twitter.service;
 
 import ca.jrvs.apps.twitter.dao.CrdRepository;
-import ca.jrvs.apps.twitter.dao.TwitterRestDao;
-import ca.jrvs.apps.twitter.dao.helper.ApacheHttpHelper;
 import ca.jrvs.apps.twitter.dto.Coordinates;
 import ca.jrvs.apps.twitter.dto.Tweet;
 
@@ -14,13 +12,6 @@ public class TwitterServiceImp implements TwitterService {
 
     public TwitterServiceImp(CrdRepository<Tweet, String> crdRepository) {
         this.crdRepository = crdRepository;
-    }
-
-    public static void main(String[] args) {
-        TwitterServiceImp imp = new TwitterServiceImp(new TwitterRestDao(new ApacheHttpHelper()));
-        //imp.showTweet("1147229192389574656", new String[]{"TeXt", "created AT", "another", "hashtags", "location", "user Mentions"});
-        imp.showTweet("1147229192389574656", new String[]{});
-        imp.postTweet("hello", 81.0, 223.23);
     }
 
     /**
@@ -64,8 +55,13 @@ public class TwitterServiceImp implements TwitterService {
                 case "coordinates":
                 case "location":
                     StringBuilder coordinates = new StringBuilder("Coordinates: ");
-                    coordinates.append(tweet.getCoordinates().getCoordinates()[0]).append(", ").append(tweet.getCoordinates().getCoordinates()[1]);
-                    System.out.println(coordinates.toString());
+                    Coordinates coord = tweet.getCoordinates();
+                    if (coord == null) {
+                        System.out.println(coordinates.toString());
+                    } else {
+                        coordinates.append(coord.getCoordinates()[0]).append(", ").append(coord.getCoordinates()[1]);
+                        System.out.println(coordinates.toString());
+                    }
                     break;
                 case "hashtags":
                     System.out.print("Hashtags: ");
@@ -113,9 +109,21 @@ public class TwitterServiceImp implements TwitterService {
         Tweet tweet = new Tweet();
         tweet.setText(text);
         Coordinates coordinates = new Coordinates();
-        coordinates.setCoordinates(new double[]{latitude, longitude});
+        coordinates.setCoordinates(new double[]{longitude, latitude});
         tweet.setCoordinates(coordinates);
-        crdRepository.save(tweet);
+        crdRepository.create(tweet);
+    }
+
+    /**
+     * Checks that a tweet is not too long
+     *
+     * @param text text of the tweet
+     */
+    private void validateTweetLength(String text) {
+        String textWithoutSpaces = text.replaceAll("\\s", "");
+        if (textWithoutSpaces.length() > 140) {
+            throw new IllegalArgumentException("A tweet can only contain 140 characters.");
+        }
     }
 
     /**
@@ -137,18 +145,6 @@ public class TwitterServiceImp implements TwitterService {
     private void validateLongitude(double longitude) {
         if (longitude < -180 || longitude > 180) {
             throw new IllegalArgumentException("The longitude must be between -180 and 180.");
-        }
-    }
-
-    /**
-     * Checks that a tweet is not too long
-     *
-     * @param text text of the tweet
-     */
-    private void validateTweetLength(String text) {
-        String textWithoutSpaces = text.replaceAll("\\s", "");
-        if (textWithoutSpaces.length() > 140) {
-            throw new IllegalArgumentException("A tweet can only contain 140 characters.");
         }
     }
 

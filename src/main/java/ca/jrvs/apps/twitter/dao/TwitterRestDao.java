@@ -112,7 +112,7 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
      * @return posted tweet
      */
     @Override
-    public Tweet save(Tweet tweet) {
+    public Tweet create(Tweet tweet) {
         URI uri = null;
         try {
             uri = generatePostUri(tweet);
@@ -132,8 +132,8 @@ public class TwitterRestDao implements CrdRepository<Tweet, String> {
      */
     private URI generatePostUri(Tweet tweet) throws URISyntaxException, UnsupportedEncodingException {
         StringBuilder uri = new StringBuilder(BASE_URI).append(POST_URI);
-        Double latitude = tweet.getCoordinates().getCoordinates()[0];
-        Double longitude = tweet.getCoordinates().getCoordinates()[1];
+        Double latitude = tweet.getCoordinates().getCoordinates()[1];
+        Double longitude = tweet.getCoordinates().getCoordinates()[0];
         String text = URLEncoder.encode(tweet.getText(), StandardCharsets.UTF_8.name());
         appendQuery(uri, "status", text, true);
         appendQuery(uri, "lat", latitude.toString(), false);
