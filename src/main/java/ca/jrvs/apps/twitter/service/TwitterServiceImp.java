@@ -29,8 +29,18 @@ public class TwitterServiceImp implements TwitterService {
         if (fields == null || fields.length == 0) {
             fields = new String[]{"created at", "id", "text", "retweet count", "favorite count", "favorited", "retweeted", "coordinates", "user mentions"};
         }
+        printTweet(tweet, fields);
+    }
+
+    /**
+     * Helper method for printing a tweet
+     *
+     * @param tweet  tweet to print
+     * @param fields names of the fields to be printed
+     */
+    private void printTweet(Tweet tweet, String[] fields) {
         for (String s : fields) {
-            switch (s.toLowerCase()) {
+            switch (s.toLowerCase().trim()) {
                 case "created at":
                 case "date":
                     System.out.println("Created at: " + tweet.getCreated_at());
@@ -117,7 +127,7 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     /**
-     * Checks that a tweet is not too long
+     * Checks whether the text of the tweet is a valid one
      *
      * @param text text of the tweet
      */
