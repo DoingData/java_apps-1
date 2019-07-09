@@ -114,13 +114,14 @@ public class TwitterServiceImp implements TwitterService {
      * @param latitude  geo latitude
      * @param longitude geo longitude
      * @return Tweet object which is returned by the Twitter API
-     * @throws IllegalArgumentException if text exceeds max number ofallowed characters of lat/long is out of range
+     * @throws IllegalArgumentException if text exceeds max number of allowed characters of lat/long is out of range
      */
     @Override
     public Tweet postTweet(String text, Double latitude, Double longitude) {
         validateTweetText(text);
         validateLatitude(latitude);
         validateLongitude(longitude);
+
         Tweet tweet = new Tweet();
         tweet.setText(text);
         Coordinates coordinates = new Coordinates();
