@@ -7,7 +7,8 @@ import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.service.TwitterService;
 import ca.jrvs.apps.twitter.service.TwitterServiceImp;
 
-public class TwitterCLI {
+public class TwitterCLIApp {
+
     public static void main(String[] args) {
         HttpHelper httpHelper = new ApacheHttpHelper();
         CrdDao crdDao = new TwitterRestDao(httpHelper);
