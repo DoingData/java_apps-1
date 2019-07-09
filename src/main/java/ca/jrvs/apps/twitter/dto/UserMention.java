@@ -9,6 +9,10 @@ public class UserMention {
     private String name;
     private String screen_name;
 
+    public UserMention(String screen_name) {
+        this.screen_name = screen_name;
+    }
+
     public BigInteger getId() {
         return id;
     }
