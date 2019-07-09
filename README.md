@@ -45,3 +45,31 @@ In case we prefer to keep the methods separate returning streams instead of list
 
 
 # Twitter CLI App
+##Introduction
+The Twitter CLI app uses the Twitter Rest API to post, delete or search for a Tweet on Twitter.
+
+##Usage 
+**Post a Tweet**
+```
+USAGE: post "text" latitude:longitude
+```
+This command will post a Tweet with the specified text and a geotag. 
+
+**Delete a Tweet**
+```
+USAGE: delete id
+```
+This command will delete the Tweet with the given id.
+
+**Show a Tweet**
+```
+USAGE: show id "fields"
+```
+This command show the Tweet with the given id.
+The parameter fields is a comma-separated list specifying which attributes of the Tweet will be displayed.
+The possible attributes are: created at, text, id, hashtags, user mentions, coordinates, retweet count, favorited count, retweeted, favorited.
+
+##Implementation
+
+![Twitter](https://github.com/MiriamEA/java_apps/blob/master/TwitterCLIApp.jpg)
+

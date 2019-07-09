@@ -57,10 +57,10 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     /**
-     * Helper method for printing a tweet
+     * Print a Tweet
      *
-     * @param tweet  tweet to print
-     * @param fields names of the fields to be printed
+     * @param tweet  tweet
+     * @param fields print Tweet fields from this parameter. Print all fields if empty
      */
     private void printTweet(Tweet tweet, String[] fields) {
         if (!(fields == null || fields.length == 0)) {

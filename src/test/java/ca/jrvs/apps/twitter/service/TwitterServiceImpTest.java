@@ -59,7 +59,6 @@ public class TwitterServiceImpTest {
             service.postTweet("hello", 345.3, 237.744);
             fail();
         } catch (IllegalArgumentException e) {
-
         }
     }
 
@@ -69,7 +68,6 @@ public class TwitterServiceImpTest {
             service.showTweet("876345h", new String[]{"text"});
             fail();
         } catch (IllegalArgumentException e) {
-
         }
         when(mockDao.findById(any())).thenReturn(mockTweet);
         Tweet tweet = service.showTweet("123", null);
@@ -82,7 +80,6 @@ public class TwitterServiceImpTest {
             service.deleteTweets(new String[]{"17643", "739e"});
             fail();
         } catch (IllegalArgumentException e) {
-
         }
         when(mockDao.deleteById(any())).thenReturn(Arrays.asList(mockTweet));
         List<Tweet> deletedTweets = service.deleteTweets(new String[]{"376642837"});
