@@ -83,7 +83,7 @@ public class TwitterServiceImp implements TwitterService {
             if (!fieldsList.contains("coordinates")) {
                 tweet.setCoordinates(null);
             }
-            if (!(fieldsList.contains("hashtags") && fieldsList.contains("user mention"))) {
+            if (!fieldsList.contains("hashtags") && !fieldsList.contains("user mentions")) {
                 tweet.setEntities(null);
             } else if (!fieldsList.contains("hashtags")) {
                 tweet.getEntities().setHashtags(null);
