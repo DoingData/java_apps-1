@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class TwitterRestDaoTest {
+public class TwitterRestDaoIntTest {
 
     private Tweet expectedTweet;
     private CrdDao dao;
