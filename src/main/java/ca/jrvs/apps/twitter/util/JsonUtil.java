@@ -25,7 +25,7 @@ public class JsonUtil {
     }
 
     public static String toPrettyJson(Object object) throws JsonProcessingException {
-        return toJson(object, true, false);
+        return toJson(object, true, true);
     }
 
     /**
