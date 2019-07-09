@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -43,7 +47,7 @@ public class TwitterServiceImpTest {
         TwitterService service = new TwitterServiceImp(mockDao);*/
         when(mockDao.create(any())).thenReturn(mockTweet);
 
-        service.postTweet("some tweet", 0.0, 0.0);
+        Tweet tweet = service.postTweet("some tweet", 0.0, 0.0);
 
         try {
             service.postTweet("", 0.0, 0.0);
@@ -68,8 +72,8 @@ public class TwitterServiceImpTest {
 
         }
         when(mockDao.findById(any())).thenReturn(mockTweet);
-        //service.showTweet("123", new String[]{"text", "coordinates", "user mention"});
-        service.showTweet("123", null);
+        Tweet tweet = service.showTweet("123", null);
+        assertNotNull(tweet);
     }
 
     @Test
@@ -80,7 +84,8 @@ public class TwitterServiceImpTest {
         } catch (IllegalArgumentException e) {
 
         }
-        when(mockDao.deleteById(any())).thenReturn(mockTweet);
-        service.deleteTweets(new String[]{"376642837"});
+        when(mockDao.deleteById(any())).thenReturn(Arrays.asList(mockTweet));
+        List<Tweet> deletedTweets = service.deleteTweets(new String[]{"376642837"});
+        assertNotNull(deletedTweets);
     }
 }
