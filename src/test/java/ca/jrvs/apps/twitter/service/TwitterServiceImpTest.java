@@ -30,12 +30,8 @@ public class TwitterServiceImpTest {
         coordinates.setCoordinates(new double[]{1, 2});
         mockTweet.setCoordinates(coordinates);
         Entities entities = new Entities();
-        Hashtag hashtag = new Hashtag();
-        hashtag.setText("test");
-        entities.setHashtags(new Hashtag[]{hashtag});
-        UserMention userMention = new UserMention();
-        userMention.setScreen_name("user_mention");
-        entities.setUser_mentions(new UserMention[]{userMention});
+        entities.setHashtags(new Hashtag[]{new Hashtag("tag1"), new Hashtag("tag2")});
+        entities.setUser_mentions(new UserMention[]{new UserMention("mention"), new UserMention("another_one")});
         mockTweet.setEntities(entities);
     }
 
