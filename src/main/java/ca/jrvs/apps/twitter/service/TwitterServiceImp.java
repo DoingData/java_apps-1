@@ -173,7 +173,7 @@ public class TwitterServiceImp implements TwitterService {
      *
      * @param ids tweet IDs which will be deleted
      * @return Tweet objects that were deleted through the Twitter API
-     * @throws IllegalArgumentException if one of the IDS is invalid
+     * @throws IllegalArgumentException if one of the IDs is invalid
      */
     @Override
     public List<Tweet> deleteTweets(String[] ids) {
