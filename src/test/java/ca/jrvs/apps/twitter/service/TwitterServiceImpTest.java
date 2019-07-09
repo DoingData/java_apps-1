@@ -1,7 +1,8 @@
 package ca.jrvs.apps.twitter.service;
 
 import ca.jrvs.apps.twitter.dao.CrdRepository;
-import ca.jrvs.apps.twitter.dto.Tweet;
+import ca.jrvs.apps.twitter.dto.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,14 +20,31 @@ public class TwitterServiceImpTest {
     @Mock
     private CrdRepository mockDao;
 
+    private Tweet mockTweet;
+
+    @Before
+    public void setup() {
+        mockTweet = new Tweet();
+        mockTweet.setText("This is a fake tweet");
+        Coordinates coordinates = new Coordinates();
+        coordinates.setCoordinates(new double[]{1, 2});
+        mockTweet.setCoordinates(coordinates);
+        Entities entities = new Entities();
+        Hashtag hashtag = new Hashtag();
+        hashtag.setText("test");
+        entities.setHashtags(new Hashtag[]{hashtag});
+        UserMention userMention = new UserMention();
+        userMention.setScreen_name("user_mention");
+        entities.setUser_mentions(new UserMention[]{userMention});
+        mockTweet.setEntities(entities);
+    }
+
     @Test
     public void postTweet() {
 
         //Replaced by @Mock @InjectMocks
         /*CrdRepository mockDao = Mockito.mock(CrdRepository.class);
         TwitterService service = new TwitterServiceImp(mockDao);*/
-        Tweet mockTweet = new Tweet();
-        mockTweet.setText("This is a fake tweet");
         when(mockDao.create(any())).thenReturn(mockTweet);
 
         service.postTweet("some tweet", 0.0, 0.0);
@@ -53,6 +71,9 @@ public class TwitterServiceImpTest {
         } catch (IllegalArgumentException e) {
 
         }
+        when(mockDao.findById(any())).thenReturn(mockTweet);
+        //service.showTweet("123", new String[]{"text", "coordinates", "user mention"});
+        service.showTweet("123", null);
     }
 
     @Test
@@ -63,5 +84,7 @@ public class TwitterServiceImpTest {
         } catch (IllegalArgumentException e) {
 
         }
+        when(mockDao.deleteById(any())).thenReturn(mockTweet);
+        service.deleteTweets(new String[]{"376642837"});
     }
 }
