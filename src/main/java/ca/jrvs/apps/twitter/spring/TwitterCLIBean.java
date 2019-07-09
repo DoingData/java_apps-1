@@ -10,9 +10,8 @@ import ca.jrvs.apps.twitter.service.TwitterServiceImp;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class TwitterCLIBean {
 
     public static void main(String[] args) {

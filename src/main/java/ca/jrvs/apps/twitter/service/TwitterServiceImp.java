@@ -5,17 +5,21 @@ import ca.jrvs.apps.twitter.dto.Coordinates;
 import ca.jrvs.apps.twitter.dto.Tweet;
 import ca.jrvs.apps.twitter.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
+@Component
 public class TwitterServiceImp implements TwitterService {
 
     private static final int MAX_TWEET_LENGTH = 140;
 
     private CrdRepository<Tweet, String> crdRepository;
 
+    @Autowired
     public TwitterServiceImp(CrdRepository<Tweet, String> crdRepository) {
         this.crdRepository = crdRepository;
     }
