@@ -1,5 +1,6 @@
 package ca.jrvs.apps.twitter.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +44,7 @@ public class JsonUtil {
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
         }
         if (includeNullValues) {
-            mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         }
         return mapper.writeValueAsString(object);
     }
