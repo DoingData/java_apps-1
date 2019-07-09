@@ -3,8 +3,12 @@ package ca.jrvs.apps.twitter.service;
 import ca.jrvs.apps.twitter.dao.CrdRepository;
 import ca.jrvs.apps.twitter.dto.Coordinates;
 import ca.jrvs.apps.twitter.dto.Tweet;
+import ca.jrvs.apps.twitter.util.JsonUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class TwitterServiceImp implements TwitterService {
 
@@ -26,69 +30,7 @@ public class TwitterServiceImp implements TwitterService {
     public void showTweet(String id, String[] fields) {
         validateId(id);
         Tweet tweet = crdRepository.findById(id);
-        if (fields == null || fields.length == 0) {
-            fields = new String[]{"created at", "id", "text", "retweet count", "favorite count", "favorited", "retweeted", "coordinates", "user mentions", "hashtags"};
-        }
         printTweet(tweet, fields);
-    }
-
-    /**
-     * Helper method for printing a tweet
-     *
-     * @param tweet  tweet to print
-     * @param fields names of the fields to be printed
-     */
-    private void printTweet(Tweet tweet, String[] fields) {
-        for (String s : fields) {
-            switch (s.toLowerCase().trim()) {
-                case "created at":
-                case "date":
-                    System.out.println("Created at: " + tweet.getCreated_at());
-                    break;
-                case "id":
-                    System.out.println("Id: " + tweet.getId_str());
-                    break;
-                case "text":
-                    System.out.println("Text: " + tweet.getText());
-                    break;
-                case "retweet count":
-                    System.out.println("Retweet count: " + tweet.getRetweet_count());
-                    break;
-                case "favorite count":
-                    System.out.println("Favorite count: " + tweet.getFavorite_count());
-                    break;
-                case "favorited":
-                case "liked":
-                    System.out.println("Favorited: " + tweet.isFavorited());
-                    break;
-                case "retweeted":
-                    System.out.println("Retweeted: " + tweet.isRetweeted());
-                    break;
-                case "coordinates":
-                case "location":
-                    StringBuilder coordinates = new StringBuilder("Coordinates: ");
-                    Coordinates coord = tweet.getCoordinates();
-                    if (coord == null) {
-                        System.out.println(coordinates.toString());
-                    } else {
-                        coordinates.append(coord.getCoordinates()[0]).append(", ").append(coord.getCoordinates()[1]);
-                        System.out.println(coordinates.toString());
-                    }
-                    break;
-                case "hashtags":
-                    System.out.print("Hashtags: ");
-                    Arrays.stream(tweet.getEntities().getHashtags()).map(h -> h.getText()).forEach(x -> System.out.print("#" + x + " "));
-                    System.out.print("\n");
-                    break;
-                case "user mentions":
-                    System.out.print("User mentions: ");
-                    Arrays.stream(tweet.getEntities().getUser_mentions()).map(m -> m.getScreen_name()).forEach(x -> System.out.print("@" + x + " "));
-                    System.out.print("\n");
-                    break;
-                default:
-                    System.out.println("This attribute does not exist: " + s);
-            }
-        }
     }
 
     /**
@@ -103,6 +45,56 @@ public class TwitterServiceImp implements TwitterService {
             if (c < '0' || c > '9') {
                 throw new IllegalArgumentException("Twitter ids only contain digits.");
             }
+        }
+    }
+
+    /**
+     * Helper method for printing a tweet
+     *
+     * @param tweet  tweet to print
+     * @param fields names of the fields to be printed
+     */
+    private void printTweet(Tweet tweet, String[] fields) {
+        if (!(fields == null || fields.length == 0)) {
+            LinkedList<String> fieldsList = new LinkedList<>();
+            fieldsList.addAll(Arrays.stream(fields).map(s -> s.trim().toLowerCase()).collect(Collectors.toList()));
+            if (!fieldsList.contains("created at")) {
+                tweet.setCreated_at(null);
+            }
+            if (!fieldsList.contains("id")) {
+                tweet.setId(null);
+                tweet.setId_str(null);
+            }
+            if (!fieldsList.contains("text")) {
+                tweet.setText(null);
+            }
+            if (!fieldsList.contains("retweet count")) {
+                tweet.setRetweet_count(null);
+            }
+            if (!fieldsList.contains("favorited count")) {
+                tweet.setFavorite_count(null);
+            }
+            if (!fieldsList.contains("favorited")) {
+                tweet.setFavorited(null);
+            }
+            if (!fieldsList.contains("retweeted")) {
+                tweet.setRetweeted(null);
+            }
+            if (!fieldsList.contains("coordinates")) {
+                tweet.setCoordinates(null);
+            }
+            if (!(fieldsList.contains("hashtags") && fieldsList.contains("user mention"))) {
+                tweet.setEntities(null);
+            } else if (!fieldsList.contains("hashtags")) {
+                tweet.getEntities().setHashtags(null);
+            } else if (!fieldsList.contains("user mentions")) {
+                tweet.getEntities().setUser_mentions(null);
+            }
+        }
+        try {
+            System.out.println(JsonUtil.toPrettyJson(tweet));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Cannot convert tweet to json string.", e);
         }
     }
 
