@@ -113,7 +113,7 @@ public class TwitterServiceImp implements TwitterService {
      * @param text      tweet text
      * @param latitude  geo latitude
      * @param longitude geo longitude
-     * @return TWeet object which is returned by the Twitter API
+     * @return Tweet object which is returned by the Twitter API
      * @throws IllegalArgumentException if text exceeds max number ofallowed characters of lat/long is out of range
      */
     @Override
