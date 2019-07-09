@@ -27,7 +27,7 @@ public class TwitterServiceImp implements TwitterService {
         validateId(id);
         Tweet tweet = crdRepository.findById(id);
         if (fields == null || fields.length == 0) {
-            fields = new String[]{"created at", "id", "text", "retweet count", "favorite count", "favorited", "retweeted", "coordinates", "user mentions"};
+            fields = new String[]{"created at", "id", "text", "retweet count", "favorite count", "favorited", "retweeted", "coordinates", "user mentions", "hashtags"};
         }
         printTweet(tweet, fields);
     }
