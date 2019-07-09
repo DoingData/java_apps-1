@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,16 +26,19 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     /**
-     * Prints a tweet
+     * Search a Tweet by id and print Tweet Object which is returned by the Twitter API
      *
-     * @param id     id of the tweet
-     * @param fields names of the fields to be shown
+     * @param id     tweet id
+     * @param fields print Tweet fields from this parameter. Print all fields if empty
+     * @return Tweet object which is returned by the Twitter API
+     * @throws IllegalArgumentException if id or fields param is invalid
      */
     @Override
-    public void showTweet(String id, String[] fields) {
+    public Tweet showTweet(String id, String[] fields) {
         validateId(id);
         Tweet tweet = crdDao.findById(id);
         printTweet(tweet, fields);
+        return tweet;
     }
 
     /**
@@ -103,14 +107,17 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     /**
-     * Posts a new tweet with a location on twitter
+     * Post a Tweet along with a geo location.
+     * Print Tweet JSON which is returned by the Twitter API
      *
-     * @param text      the text of the tweet
-     * @param latitude  latitude of the location
-     * @param longitude longitude of the location
+     * @param text      tweet text
+     * @param latitude  geo latitude
+     * @param longitude geo longitude
+     * @return TWeet object which is returned by the Twitter API
+     * @throws IllegalArgumentException if text exceeds max number ofallowed characters of lat/long is out of range
      */
     @Override
-    public void postTweet(String text, Double latitude, Double longitude) {
+    public Tweet postTweet(String text, Double latitude, Double longitude) {
         validateTweetText(text);
         validateLatitude(latitude);
         validateLongitude(longitude);
@@ -119,7 +126,7 @@ public class TwitterServiceImp implements TwitterService {
         Coordinates coordinates = new Coordinates();
         coordinates.setCoordinates(new double[]{longitude, latitude});
         tweet.setCoordinates(coordinates);
-        crdDao.create(tweet);
+        return crdDao.create(tweet);
     }
 
     /**
@@ -160,15 +167,21 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     /**
-     * Deletes a tweet on twitter
+     * Delete Tweet(s) by id(s).
+     * Print Tweet object(s) which returned by the Twitter API
      *
-     * @param ids id of the tweet
+     * @param ids tweet IDs which will be deleted
+     * @return Tweet objects that were deleted through the Twitter API
+     * @throws IllegalArgumentException if one of the IDS is invalid
      */
     @Override
-    public void deleteTweets(String[] ids) {
+    public List<Tweet> deleteTweets(String[] ids) {
+        List<Tweet> deletedTweets = new LinkedList<Tweet>();
         for (int i = 0; i < ids.length; i++) {
             validateId(ids[i]);
-            crdDao.deleteById(ids[i]);
+            Tweet tweet = crdDao.deleteById(ids[i]);
+            deletedTweets.add(tweet);
         }
+        return deletedTweets;
     }
 }

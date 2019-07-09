@@ -18,7 +18,7 @@ public interface TwitterService {
     Tweet postTweet(String text, Double latitude, Double longitude);
 
     /**
-     * Search a TWeet by id and print Tweet Object which is returned by the Twitter API
+     * Search a Tweet by id and print Tweet Object which is returned by the Twitter API
      *
      * @param id     tweet id
      * @param fields print Tweet fields from this parameter. Print all fields if empty
@@ -32,6 +32,7 @@ public interface TwitterService {
      * Print Tweet object(s) which returned by the Twitter API
      *
      * @param ids tweet IDs which will be deleted
+     * @return Tweet objects that were deleted through the Twitter API
      * @throws IllegalArgumentException if one of the IDS is invalid
      */
     List<Tweet> deleteTweets(String[] ids);
