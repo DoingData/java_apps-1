@@ -1,6 +1,6 @@
 package ca.jrvs.apps.twitter.service;
 
-import ca.jrvs.apps.twitter.dao.CrdRepository;
+import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.dto.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class TwitterServiceImpTest {
     @InjectMocks
     private TwitterServiceImp service;
     @Mock
-    private CrdRepository mockDao;
+    private CrdDao mockDao;
 
     private Tweet mockTweet;
 
@@ -39,7 +39,7 @@ public class TwitterServiceImpTest {
     public void postTweet() {
 
         //Replaced by @Mock @InjectMocks
-        /*CrdRepository mockDao = Mockito.mock(CrdRepository.class);
+        /*CrdDao mockDao = Mockito.mock(CrdDao.class);
         TwitterService service = new TwitterServiceImp(mockDao);*/
         when(mockDao.create(any())).thenReturn(mockTweet);
 

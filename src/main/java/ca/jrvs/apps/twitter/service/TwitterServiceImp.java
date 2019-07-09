@@ -1,6 +1,6 @@
 package ca.jrvs.apps.twitter.service;
 
-import ca.jrvs.apps.twitter.dao.CrdRepository;
+import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.dto.Coordinates;
 import ca.jrvs.apps.twitter.dto.Tweet;
 import ca.jrvs.apps.twitter.util.JsonUtil;
@@ -17,11 +17,11 @@ public class TwitterServiceImp implements TwitterService {
 
     private static final int MAX_TWEET_LENGTH = 140;
 
-    private CrdRepository<Tweet, String> crdRepository;
+    private CrdDao<Tweet, String> crdDao;
 
     @Autowired
-    public TwitterServiceImp(CrdRepository<Tweet, String> crdRepository) {
-        this.crdRepository = crdRepository;
+    public TwitterServiceImp(CrdDao<Tweet, String> crdDao) {
+        this.crdDao = crdDao;
     }
 
     /**
@@ -33,7 +33,7 @@ public class TwitterServiceImp implements TwitterService {
     @Override
     public void showTweet(String id, String[] fields) {
         validateId(id);
-        Tweet tweet = crdRepository.findById(id);
+        Tweet tweet = crdDao.findById(id);
         printTweet(tweet, fields);
     }
 
@@ -119,7 +119,7 @@ public class TwitterServiceImp implements TwitterService {
         Coordinates coordinates = new Coordinates();
         coordinates.setCoordinates(new double[]{longitude, latitude});
         tweet.setCoordinates(coordinates);
-        crdRepository.create(tweet);
+        crdDao.create(tweet);
     }
 
     /**
@@ -168,7 +168,7 @@ public class TwitterServiceImp implements TwitterService {
     public void deleteTweets(String[] ids) {
         for (int i = 0; i < ids.length; i++) {
             validateId(ids[i]);
-            crdRepository.deleteById(ids[i]);
+            crdDao.deleteById(ids[i]);
         }
     }
 }

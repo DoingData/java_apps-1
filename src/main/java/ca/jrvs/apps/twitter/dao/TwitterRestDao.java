@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Component
-public class TwitterRestDao implements CrdRepository<Tweet, String> {
+public class TwitterRestDao implements CrdDao<Tweet, String> {
     //URIs
     private static final String BASE_URI = "https://api.twitter.com/1.1/statuses/";
     private static final String FIND_URI = "show.json";

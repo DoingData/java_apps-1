@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 public class TwitterRestDaoTest {
 
     private Tweet expectedTweet;
-    private CrdRepository dao;
+    private CrdDao dao;
 
     @Before
     public void setup() {

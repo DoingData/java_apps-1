@@ -1,7 +1,7 @@
 package ca.jrvs.apps.twitter.spring;
 
 import ca.jrvs.apps.twitter.TwitterCLIRunner;
-import ca.jrvs.apps.twitter.dao.CrdRepository;
+import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.dao.TwitterRestDao;
 import ca.jrvs.apps.twitter.dao.helper.ApacheHttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
@@ -21,12 +21,12 @@ public class TwitterCLIBean {
     }
 
     @Bean
-    public TwitterService twitterService(CrdRepository crdRepository) {
-        return new TwitterServiceImp(crdRepository);
+    public TwitterService twitterService(CrdDao crdDao) {
+        return new TwitterServiceImp(crdDao);
     }
 
     @Bean
-    public CrdRepository crdRepository(HttpHelper helper) {
+    public CrdDao crdDao(HttpHelper helper) {
         return new TwitterRestDao(helper);
     }
 
