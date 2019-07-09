@@ -1,9 +1,6 @@
 package ca.jrvs.apps.twitter;
 
-import ca.jrvs.apps.twitter.dao.TwitterRestDao;
-import ca.jrvs.apps.twitter.dao.helper.ApacheHttpHelper;
 import ca.jrvs.apps.twitter.service.TwitterService;
-import ca.jrvs.apps.twitter.service.TwitterServiceImp;
 
 public class TwitterCLIRunner {
 
@@ -11,11 +8,6 @@ public class TwitterCLIRunner {
 
     public TwitterCLIRunner(TwitterService twitterService) {
         this.twitterService = twitterService;
-    }
-
-    public static void main(String[] args) {
-        TwitterCLIRunner runner = new TwitterCLIRunner(new TwitterServiceImp(new TwitterRestDao(new ApacheHttpHelper())));
-        runner.showTweet("1147229192389574656", null);
     }
 
     /**
