@@ -87,23 +87,17 @@ This class is responsible for creating the URIs to post, show, and delete a twee
 It is also responsible for creating tweet objects from the HTTP responses.
 
 **Service layer**
-
+The service layer consists of the TwitterService interface and the class TwitterServiceImp which implements TwitterService and depends on CrdDao.
+All business logic is done here.
+TwitterServiceImp is responsible for validating the user input (tweet text is not too long, latitude and longitude are actual coordinates, ids only consist of digits).
+If the input is valid it will pass them to the corresponding method in CrdDao.
+It is also responsible for selecting the correct fields when showing a tweet.
 
 **Interface layer**
+The interface layer consists of the class TwitterCLIService which depends on TwitterService.
+In this class the user input is parsed and then passed on to the correct method in TwitterService.
 
 **App layer** 
 The app layer consists of the class TwitterCLIApp.
 This class contains the main method.
 There, all dependencies are created and the user input is passed to the interface layer.
-
-
-
-
-
-
-The interface layer consists of the class TwitterCLIService.
-Here, the user input is parsed and validated. 
-When the app is used to post a tweet, TwitterCLIService checks that the text does not exceed the maximum tweet lenght, and that the longitude and latitude are actual coordinates.
-When the app is used to show or delete a tweet, TwitterCLIService checks  that the id consists only of digits.
-If any of the checks fail, an IllegalArgumentException will be thrown.
-If all checks go through 
