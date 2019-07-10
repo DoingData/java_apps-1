@@ -69,18 +69,47 @@ This command show the Tweet with the given id.
 The parameter fields is a comma-separated list specifying which attributes of the Tweet will be displayed.
 The possible attributes are: created at, text, id, hashtags, user mentions, coordinates, retweet count, favorited count, retweeted, favorited.
 
-## Implementation
+## Component Design
 
 ![Twitter](https://github.com/MiriamEA/java_apps/blob/master/TwitterCLIApp.jpg)
 
-The implementation is structured into several layers: app, interface, service, and access.
+HttpHelper: make HTTP requests (get, post, delete) and handle authorization
+CrdDao: data access object handling tweet objects, depends on HttpHelper
+TwitterService: business logic
 
+## Implementation
+
+The implementation is structured into several layers: access, service, interface, service and app.
+
+**Access layer** 
+The access layer handles the access to the Twitter REST API.
+The HttpHelper interface has methods that take an URI, make a get or post HTTP request and return the response of that request.
+The class ApacheHttpHelper implements this interface using the Apache HTTP client.
+It expects the Twitter authentication details in system environment variables. 
+The second interface in this layer is the CrdDao interface.
+This interface contains methods to create an entity, find and entity by id, and delete an entity by id.
+The class TwitterRestDao implements the CrdDao interface and depends on the HttpHelper.
+This class is responsible for creating the URIs to post, show, and delete a tweet and passing them to the HttpHelper.
+It is also responsible for creating tweet objects from the HTTP responses.
+
+**Service layer**
+
+
+**Interface layer**
+
+**App layer** 
 The app layer consists of the class TwitterCLIApp.
 This class contains the main method.
 There, all dependencies are created and the user input is passed to the interface layer.
+
+
+
+
+
 
 The interface layer consists of the class TwitterCLIService.
 Here, the user input is parsed and validated. 
 When the app is used to post a tweet, TwitterCLIService checks that the text does not exceed the maximum tweet lenght, and that the longitude and latitude are actual coordinates.
 When the app is used to show or delete a tweet, TwitterCLIService checks  that the id consists only of digits.
 If any of the checks fail, an IllegalArgumentException will be thrown.
+If all checks go through 
