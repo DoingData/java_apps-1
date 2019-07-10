@@ -69,15 +69,9 @@ This command show the Tweet with the given id.
 The parameter fields is a comma-separated list specifying which attributes of the Tweet will be displayed.
 The possible attributes are: created at, text, id, hashtags, user mentions, coordinates, retweet count, favorited count, retweeted, favorited.
 
-## Component Design
+## Implementation
 
 ![Twitter](https://github.com/MiriamEA/java_apps/blob/master/TwitterCLIApp.jpg)
-
-HttpHelper: make HTTP requests (get, post, delete) and handle authorization
-CrdDao: data access object handling tweet objects, depends on HttpHelper
-TwitterService: business logic
-
-## Implementation
 
 The implementation is structured into several layers: access, service, interface, service and app.
 
