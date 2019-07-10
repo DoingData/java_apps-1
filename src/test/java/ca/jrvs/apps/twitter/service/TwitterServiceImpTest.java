@@ -9,11 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -72,6 +70,13 @@ public class TwitterServiceImpTest {
         when(mockDao.findById(any())).thenReturn(mockTweet);
         Tweet tweet = service.showTweet("123", null);
         assertNotNull(tweet);
+        assertNotNull(tweet.getCoordinates());
+        assertNotNull(tweet.getEntities());
+
+        Tweet tweet1 = service.showTweet("2345", new String[]{"text, id"});
+        assertNotNull(tweet1);
+        assertNotNull(tweet1.getText());
+        assertEquals(null, tweet1.getEntities());
     }
 
     @Test
@@ -81,7 +86,7 @@ public class TwitterServiceImpTest {
             fail();
         } catch (IllegalArgumentException e) {
         }
-        when(mockDao.deleteById(any())).thenReturn(Arrays.asList(mockTweet));
+        when(mockDao.deleteById(any())).thenReturn(mockTweet);
         List<Tweet> deletedTweets = service.deleteTweets(new String[]{"376642837"});
         assertNotNull(deletedTweets);
     }

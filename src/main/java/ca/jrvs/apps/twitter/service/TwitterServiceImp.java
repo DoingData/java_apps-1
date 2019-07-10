@@ -2,6 +2,7 @@ package ca.jrvs.apps.twitter.service;
 
 import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.dto.Coordinates;
+import ca.jrvs.apps.twitter.dto.Entities;
 import ca.jrvs.apps.twitter.dto.Tweet;
 import ca.jrvs.apps.twitter.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,8 +38,13 @@ public class TwitterServiceImp implements TwitterService {
     public Tweet showTweet(String id, String[] fields) {
         validateId(id);
         Tweet tweet = crdDao.findById(id);
-        printTweet(tweet, fields);
-        return tweet;
+        Tweet printTweet = selectFields(tweet, fields);
+        try {
+            System.out.println(JsonUtil.toPrettyJson(printTweet));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Cannot convert tweet to json string.", e);
+        }
+        return printTweet;
     }
 
     /**
@@ -57,53 +63,54 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     /**
-     * Print a Tweet
-     *
-     * @param tweet  tweet
-     * @param fields print Tweet fields from this parameter. Print all fields if empty
+     * Construct a tweet from a given tweet where all fields that are given are not null and all fields not given are null
+     * @param tweet tweet
+     * @param fields the fields to select
+     * @return tweet with null fields
      */
-    private void printTweet(Tweet tweet, String[] fields) {
+    private Tweet selectFields(Tweet tweet, String[] fields) {
+        Tweet printTweet = new Tweet();
         if (!(fields == null || fields.length == 0)) {
             LinkedList<String> fieldsList = new LinkedList<>();
             fieldsList.addAll(Arrays.stream(fields).map(s -> s.trim().toLowerCase()).collect(Collectors.toList()));
-            if (!fieldsList.contains("created at")) {
-                tweet.setCreated_at(null);
+            if (fieldsList.contains("created at")) {
+                printTweet.setCreated_at(tweet.getCreated_at());
             }
-            if (!fieldsList.contains("id")) {
-                tweet.setId(null);
-                tweet.setId_str(null);
+            if (fieldsList.contains("id")) {
+                printTweet.setId_str(tweet.getId_str());
+                printTweet.setId(printTweet.getId());
             }
-            if (!fieldsList.contains("text")) {
-                tweet.setText(null);
+            if (fieldsList.contains("text")) {
+                printTweet.setText(tweet.getText());
             }
-            if (!fieldsList.contains("retweet count")) {
-                tweet.setRetweet_count(null);
+            if (fieldsList.contains("retweet count")) {
+                printTweet.setRetweet_count(tweet.getRetweet_count());
             }
-            if (!fieldsList.contains("favorited count")) {
-                tweet.setFavorite_count(null);
+            if (fieldsList.contains("favorited count")) {
+                printTweet.setFavorite_count(tweet.getFavorite_count());
             }
-            if (!fieldsList.contains("favorited")) {
-                tweet.setFavorited(null);
+            if (fieldsList.contains("favorited")) {
+                printTweet.setFavorited(tweet.isFavorited());
             }
-            if (!fieldsList.contains("retweeted")) {
-                tweet.setRetweeted(null);
+            if (fieldsList.contains("retweeted")) {
+                printTweet.setRetweeted(tweet.isRetweeted());
             }
-            if (!fieldsList.contains("coordinates")) {
-                tweet.setCoordinates(null);
+            if (fieldsList.contains("coordinates")) {
+                printTweet.setCoordinates(tweet.getCoordinates());
             }
-            if (!fieldsList.contains("hashtags") && !fieldsList.contains("user mentions")) {
-                tweet.setEntities(null);
-            } else if (!fieldsList.contains("hashtags")) {
-                tweet.getEntities().setHashtags(null);
-            } else if (!fieldsList.contains("user mentions")) {
-                tweet.getEntities().setUser_mentions(null);
+            if (fieldsList.contains("hashtags") || fieldsList.contains("user mentions")) {
+                printTweet.setEntities(new Entities());
             }
+            if (fieldsList.contains("hashtags")) {
+                printTweet.getEntities().setHashtags(tweet.getEntities().getHashtags());
+            }
+            if (fieldsList.contains("user mentions")) {
+                printTweet.getEntities().setUser_mentions(tweet.getEntities().getUser_mentions());
+            }
+        } else {
+            printTweet = tweet;
         }
-        try {
-            System.out.println(JsonUtil.toPrettyJson(tweet));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Cannot convert tweet to json string.", e);
-        }
+        return printTweet;
     }
 
     /**
