@@ -73,7 +73,7 @@ public class TwitterServiceImpTest {
         assertNotNull(tweet.getCoordinates());
         assertNotNull(tweet.getEntities());
 
-        Tweet tweet1 = service.showTweet("2345", new String[]{"text, id"});
+        Tweet tweet1 = service.showTweet("2345", new String[]{"text", "id"});
         assertNotNull(tweet1);
         assertNotNull(tweet1.getText());
         assertEquals(null, tweet1.getEntities());
