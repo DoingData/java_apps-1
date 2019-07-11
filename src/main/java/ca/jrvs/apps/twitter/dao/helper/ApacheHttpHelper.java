@@ -21,8 +21,15 @@ public class ApacheHttpHelper implements HttpHelper {
     private HttpClient httpClient;
 
     public ApacheHttpHelper() {
-        consumer = new CommonsHttpOAuthConsumer(System.getenv("CONSUMER_KEY"), System.getenv("CONSUMER_SECRET"));
-        consumer.setTokenWithSecret(System.getenv("ACCESS_TOKEN"), System.getenv("TOKEN_SECRET"));
+        String consumerKey = System.getenv("CONSUMER_KEY");
+        String consumerSecret = System.getenv("CONSUMER_SECRET");
+        String accessToken = System.getenv("ACCESS_TOKEN");
+        String tokenSecret = System.getenv("TOKEN_SECRET");
+        if (consumerKey == null || consumerSecret == null || accessToken == null || tokenSecret == null) {
+            throw new RuntimeException("Cannot find complete authentication information for Twitter. " + "Please set your environment variables.");
+        }
+        consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
+        consumer.setTokenWithSecret(accessToken, tokenSecret);
         httpClient = new DefaultHttpClient();
     }
 
