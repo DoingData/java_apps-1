@@ -73,7 +73,8 @@ The Twitter CLI app uses the Twitter Rest API to post, delete or search for a Tw
 ```
 USAGE: post "text" latitude:longitude
 ```
-This command will post a Tweet with the specified text and a geotag. 
+This command will post a Tweet with the specified text and a geotag.
+For example `post "Hello #Toronto" 43.653225:-79.383186` will post the Tweet "Hello #Toronto" with Toronto as its location.
 
 **Delete a Tweet**
 ```
@@ -81,6 +82,7 @@ USAGE: delete "ids"
 ```
 This command will delete the Tweet with the given ids.
 The parameter ids is a comma-separated list of Tweet ids.
+For example `delete "123, 234` will delete the two Tweets with id 123 and 234.
 
 **Show a Tweet**
 ```
@@ -89,6 +91,7 @@ USAGE: show id "fields"
 This command show the Tweet with the given id.
 The parameter fields is a comma-separated list specifying which attributes of the Tweet will be displayed.
 The possible attributes are: created at, text, id, hashtags, user mentions, coordinates, retweet count, favorited count, retweeted, favorited.
+For example `show 3445 "hashtags, text"` will show the complete text as well as all hastags of the Tweet with id 3445.
 
 ## 3.4 Design and Implementation
 
