@@ -1,9 +1,9 @@
-# Java Grep App
-## Introduction
+# 1 Java Grep App
+## 1.1 Introduction
 The Java Grep App searches recursively for all lines in all files under a given directory that match a given regular expression.
 The lines that match the pattern are written into a file. 
 
-## Usage
+## 1.2 Usage
 ```
 USAGE: regex directory outFile
 ```
@@ -16,7 +16,7 @@ Running the app with the following three arguments
 searches all files in the directory /home/user and all subdirectories.
 It writes any line containing the word 'data' to the file /tmp/grep.out.
  
-## Design and Implementation
+## 1.3 Design and Implementation
 The implementation of the process() method is straightforward with two nested for-loops.
 The out loop iterates over all files and the inner loop iterates over all lines in one file.
 ```
@@ -28,7 +28,7 @@ for file in listFiles(directory)
 writeToFile(matchingLines)
 ```
 
-## Enhancements and Issues
+## 1.4 Enhancements and Issues
 With the current implementation the app might run into an OutOfMemoryError.
 All lines of a file are stored in a list, no matter if the match the expression or not.
 If the directory contains very big files, allocating memory for the list can become a problem.
@@ -41,12 +41,12 @@ If it matches we write it to the output file. If it does not match we can just i
 In case we prefer to keep the methods separate returning streams instead of list is a better choice regarding memory issues. 
 
 
-# Java JDBC App
-## Introduction
+# 2 Java JDBC App
+## 2.1 Introduction
 The JDBC app uses the Java Database Connectivity API to connect and send SQL queries to a Postgresql database.
 
-## Design and Implementation
-### Database tables
+## 2.2 Design and Implementation
+### 2.2.1 Database tables
 The database hplussport consists of five tables: customer, salesperson, product, orders, and order_item.
 The table customer stores first name, last name, email address, phone number, address, city, zipcode, and an unique id for each customer.
 The table salesperson stores the same information as the customer table for each salesperson.
@@ -55,15 +55,16 @@ The table orders contains the following information for an order: a unique id, a
 The table order_item stores the product information for an order.
 More specifically it stores order_id, product_it, quantity, and a unique id.
 
-### Code
-The implementation of this app uses the Data Access Object pattern to send and process SQL queries.
+### 2.2.2 Code
+The implementation of this app uses the Data Access Object (DAO) pattern to send SQL queries and process their results.
+The DAO pattern is used to separate low-level database access operations from high-level business operations.
 
 
-# Twitter CLI App
-## Introduction
+# 3 Twitter CLI App
+## 3.1 Introduction
 The Twitter CLI app uses the Twitter Rest API to post, delete or search for a Tweet on Twitter from the command line.
 
-## Usage 
+## 3.2 Usage 
 **Post a Tweet**
 ```
 USAGE: post "text" latitude:longitude
@@ -85,7 +86,7 @@ This command show the Tweet with the given id.
 The parameter fields is a comma-separated list specifying which attributes of the Tweet will be displayed.
 The possible attributes are: created at, text, id, hashtags, user mentions, coordinates, retweet count, favorited count, retweeted, favorited.
 
-## Design and Implementation
+## 3.4 Design and Implementation
 
 ![Twitter](https://github.com/MiriamEA/java_apps/blob/master/TwitterCLIApp.jpg)
 
