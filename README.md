@@ -44,7 +44,7 @@ In case we prefer to keep the methods separate returning streams instead of list
 # 2 Java JDBC App
 ## 2.1 Introduction
 The JDBC app uses the Java Database Connectivity API to connect and send SQL queries to a Postgresql database.
-The database is for an e-commerce business.
+The database models a sales business.
 The app can create a new customer, delete a customer, update information of a customer, find customer information, and get order information
 
 ## 2.2 Design and Implementation
@@ -62,7 +62,11 @@ More specifically it stores order_id, product_it, quantity, and a unique id.
 
 The implementation of this app uses the Data Access Object (DAO) pattern to send SQL queries and process their results.
 The DAO pattern is used to separate low-level database access operations from high-level business operations.
-
+The DataTransferObject interface ensures that a data transfer object like customer and order have a method that returns their id.
+The abstract class DataAccessObject is a parameterized class where the parameter has to implement the DataTransferObject interface.
+It provides method signatures for create, read, update, and delete (CRUD) operations.
+The classes CustomerDAO and OrderDAO extend the DataAccessObject class.
+They contain the specific SQL queries for the CRUD operations for customer and order data.
 
 # 3 Twitter CLI App
 ## 3.1 Introduction
