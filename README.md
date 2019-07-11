@@ -31,7 +31,7 @@ writeToFile(matchingLines)
 ## Enhancements and Issues
 With the current implementation the app might run into an OutOfMemoryError.
 All lines of a file are stored in a list, no matter if the match the expression or not.
-If the directory containes very big files, allocating memory for the list can become a problem.
+If the directory contains very big files, allocating memory for the list can become a problem.
 Another problem could be the list containing all matching lines.
 This list grows until all files are processed.
 Only then are the matching lines written into the file. 
@@ -42,11 +42,26 @@ In case we prefer to keep the methods separate returning streams instead of list
 
 
 # Java JDBC App
+## Introduction
+The JDBC app uses the Java Database Connectivity API to connect and send SQL queries to a Postgresql database.
+
+## Design and Implementation
+### Database tables
+The database hplussport consists of five tables: customer, salesperson, product, orders, and order_item.
+The table customer stores first name, last name, email address, phone number, address, city, zipcode, and an unique id for each customer.
+The table salesperson stores the same information as the customer table for each salesperson.
+The product table stores a code, a name, a size, a variety, a price, and a status. Each product is identified by a unique id.
+The table orders contains the following information for an order: a unique id, a creation date, a total price, a status, a customer id, and a salesperson id.
+The table order_item stores the product information for an order.
+More specifically it stores order_id, product_it, quantity, and a unique id.
+
+### Code
+The implementation of this app uses the Data Access Object pattern to send and process SQL queries.
 
 
 # Twitter CLI App
 ## Introduction
-The Twitter CLI app uses the Twitter Rest API to post, delete or search for a Tweet on Twitter.
+The Twitter CLI app uses the Twitter Rest API to post, delete or search for a Tweet on Twitter from the command line.
 
 ## Usage 
 **Post a Tweet**
@@ -57,9 +72,10 @@ This command will post a Tweet with the specified text and a geotag.
 
 **Delete a Tweet**
 ```
-USAGE: delete id
+USAGE: delete "ids"
 ```
-This command will delete the Tweet with the given id.
+This command will delete the Tweet with the given ids.
+The parameter ids is a comma-separated list of Tweet ids.
 
 **Show a Tweet**
 ```
@@ -69,7 +85,7 @@ This command show the Tweet with the given id.
 The parameter fields is a comma-separated list specifying which attributes of the Tweet will be displayed.
 The possible attributes are: created at, text, id, hashtags, user mentions, coordinates, retweet count, favorited count, retweeted, favorited.
 
-## Implementation
+## Design and Implementation
 
 ![Twitter](https://github.com/MiriamEA/java_apps/blob/master/TwitterCLIApp.jpg)
 
