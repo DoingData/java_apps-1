@@ -1,3 +1,6 @@
+# 0 Introduction
+This project consists of three application: the Java Grapp App, the Java JDBC App, and the Twitter App.
+
 # 1 Java Grep App
 ## 1.1 Introduction
 The Java Grep App searches recursively for all lines in all files under a given directory that match a given regular expression.
