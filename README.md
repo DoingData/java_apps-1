@@ -1,3 +1,5 @@
+NOT DONE YET!
+
 # 0 Introduction
 This project consists of three application: the Java Grapp App, the Java JDBC App, and the Twitter App.
 
