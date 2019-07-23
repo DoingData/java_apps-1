@@ -47,7 +47,7 @@ For example `show 3445 "hashtags, text"` will show the complete text as well as 
 
 ## 1.3 Design and Implementation
 
-![Twitter](https://github.com/MiriamEA/java_apps/blob/master/TwitterCLIApp.jpg)
+![Twitter](https://github.com/MiriamEA/java_apps/tree/master/assets/TwitterCLIApp.jpg)
 
 The implementation is structured into several layers: access, service, interface, service and app.
 
@@ -137,7 +137,7 @@ The table order_item stores the product information for an order.
 More specifically it stores order_id, product_it, quantity, and a unique id.
 
 ### 3.2.2 Code
-![JDBC](https://github.com/MiriamEA/java_apps/blob/master/JDBC.png)
+![JDBC](https://github.com/MiriamEA/tree/master/assets/JDBC.png)
 
 The implementation of this app uses the Data Access Object (DAO) pattern to send SQL queries and process their results.
 The DAO pattern is used to separate low-level database access operations from high-level business operations.
